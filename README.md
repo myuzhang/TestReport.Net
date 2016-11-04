@@ -27,7 +27,7 @@ This project is to generate the report of SpecFlow test run and send the report 
     <add key="stmpUser" value="user" />
     <add key="stmpPass" value="password" />
     <add key="stmpFrom" value="anyName@your.domain" />
-    <add key="stmpTo" value="anyone@your.domain" />
+    <add key="stmpTo" value="anyone@your.domain;anyGroup@your.domain" />
   </appSettings>
 ```
   
@@ -35,4 +35,4 @@ This project is to generate the report of SpecFlow test run and send the report 
 * testResultFolder -- define the test report folder that you want to store the result
 * sendEmailReport -- if it is true, the report will be sent out via email, otherwise no report being sent out
 * stmpHost/stmpPort/stmpSSL/stmpUser/stmpPass -- the smtp service parameters that you need to set
-* stmpFrom/stmpTo -- the mail you want to sent from and to
+* stmpFrom/stmpTo -- the mail you want to sent from and to. Use ; to separate different mail recipient
