@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using TechTalk.SpecFlow;
 using TestReport.SpecFlow.EmailReport;
@@ -30,10 +27,17 @@ namespace TestReport.SpecFlow.ReportHooks
         [AfterTestRun(Order = 501)]
         public static void PublishTestResultByEmail()
         {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["sendEmailReport"]))
+            try
             {
-                string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
-                SendEmailManager.Instance.SendEmail(testResultFolder);
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["sendEmailReport"]))
+                {
+                    string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
+                    SendEmailManager.Instance.SendEmail(testResultFolder);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Email sending meets some errors: {0}", e.Message);
             }
         }
 
