@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>TestReport.SpecFlow</id>
+    <version>1.0.1</version>
+    <title>TestReport for SpecFlow</title>
+    <authors>Michael Zhang</authors>
+    <owners>Michael Zhang</owners>
+    <projectUrl>https://github.com/myuzhang/TestReport.Net/tree/master/TestReport.SpecFlow</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Generate the report of SpecFlow test run and send the report via email</description>
+    <releaseNotes>The first release.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>TestReport SpecFlow</tags>
+  </metadata>
+  <files>
+  <file src="Content\app.config.transform" target="content" />
+  </files>
+</package>

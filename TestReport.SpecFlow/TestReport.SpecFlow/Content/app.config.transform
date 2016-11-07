@@ -1,0 +1,19 @@
+<configuration>
+  <specFlow>
+    <stepAssemblies>
+      <stepAssembly assembly="TestReport.SpecFlow" />
+    </stepAssemblies>
+  </specFlow>
+  <appSettings>
+    <add key="testResultFolder" value="c:\TestResults"/>
+    <!--Report Email settings-->
+    <add key="sendEmailReport" value="false" />
+    <add key="stmpHost" value="your.smpt.host" />
+    <add key="stmpPort" value="587OrElse" />
+    <add key="stmpSSL" value="trueOrFault" />
+    <add key="stmpUser" value="user" />
+    <add key="stmpPass" value="password" />
+    <add key="stmpFrom" value="anyName@your.domain" />
+    <add key="stmpTo" value="anyone@your.domain;anyGroup@your.domain" />
+  </appSettings>
+</configuration>
