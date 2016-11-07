@@ -7,8 +7,8 @@ Currently there is only one project: TestReport.SpecFlow which is collecting tes
 This project is to generate the report of SpecFlow test run and send the report via email. The report can show the total pass ratio, feature-based pass ratio and each test scenario context. If it is a portal UI testing and the test case fails, a screenshot will be captured in the test scenario context for that failed test step.
 
 ### How to setup test report by using TestReport.SpecFlow
-1. Add the package to your SepcFlow project by NuGet @
-2. Add the following configuration to the App.config file:
+1. Add the package to your SepcFlow project by NuGet @https://www.nuget.org/packages/TestReport.SpecFlow
+2. As the NuGet package is installed, the following configuration will be added to the App.config of the specflow project and you can update the value accroding to your requirements:
 
 ```
   <specFlow>
@@ -18,7 +18,7 @@ This project is to generate the report of SpecFlow test run and send the report 
   </specFlow>
 
   <appSettings>
-    <add key="testResultFolder" value="pathLikeThis - c:\TestResults"/>
+    <add key="testResultFolder" value="c:\TestResults"/>
     <!--Report Email settings-->
     <add key="sendEmailReport" value="true" />
     <add key="stmpHost" value="your.smpt.host" />
