@@ -7,6 +7,7 @@
   <appSettings>
     <add key="testResultFolder" value="c:\TestResults"/>
     <!--Report Email settings-->
+	<add key="subjectEmail" value="yoursubject"/>
     <add key="sendEmailReport" value="false" />
     <add key="stmpHost" value="your.smpt.host" />
     <add key="stmpPort" value="587OrElse" />
