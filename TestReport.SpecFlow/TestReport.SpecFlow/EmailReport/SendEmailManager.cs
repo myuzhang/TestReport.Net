@@ -62,7 +62,8 @@ namespace TestReport.SpecFlow.EmailReport
                     mm.To.Add(new MailAddress(to));
                 }
             }
-            mm.Subject = "Test Result";
+            //mm.Subject = "Test Result";
+            mm.Subject = ConfigurationManager.AppSettings["subjectEmail"];
             mm.IsBodyHtml = true;
             TestResultMailBody mailBody = new TestResultMailBody();
             mailBody
@@ -74,9 +75,9 @@ namespace TestReport.SpecFlow.EmailReport
 
             // refer to http://stackoverflow.com/questions/15241889/i-didnt-find-zipfile-class-in-the-system-io-compression-namespace
             if (!string.IsNullOrEmpty(attachmentFolder))
-            {
+            {               
                 string testResultFolder = ConfigurationManager.AppSettings["testResultFolder"];
-                string zipFile = $@"{testResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd hh_mm")}.zip";
+                string zipFile = $@"{testResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}.zip";
                 ZipFile.CreateFromDirectory(attachmentFolder, zipFile, CompressionLevel.Fastest, true);
                 mm.Attachments.Add(new Attachment(zipFile));
             }

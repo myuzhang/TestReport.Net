@@ -15,7 +15,7 @@ namespace TestReport.SpecFlow.ReportHooks
         public static void CreateTestResultsFolder()
         {
             string failedTestResultFolder = ConfigurationManager.AppSettings["testResultFolder"];
-            failedTestResultFolder = $@"{failedTestResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd hh_mm")}";
+            failedTestResultFolder = $@"{failedTestResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}";
             if (!Directory.Exists(failedTestResultFolder))
             {
                 Directory.CreateDirectory(failedTestResultFolder);
