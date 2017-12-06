@@ -20,6 +20,7 @@ This project is to generate the report of SpecFlow test run and send the report 
   <appSettings>
     <add key="testResultFolder" value="c:\TestResults"/>
     <!--Report Email settings-->
+    <add key="subjectEmail" value="yoursubject"/>
     <add key="sendEmailReport" value="true" />
     <add key="stmpHost" value="your.smpt.host" />
     <add key="stmpPort" value="587OrElse" />
