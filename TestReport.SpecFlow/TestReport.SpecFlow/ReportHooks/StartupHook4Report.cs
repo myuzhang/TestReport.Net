@@ -10,6 +10,11 @@ namespace TestReport.SpecFlow.ReportHooks
     [Binding]
     public sealed class StartupHook4Report
     {
+        public StartupHook4Report(IObjectContainer objectContainer)
+        {
+            _objectContainer = objectContainer;
+        }
+
         IObjectContainer _objectContainer;
 
         public IObjectContainer ObjectContainer

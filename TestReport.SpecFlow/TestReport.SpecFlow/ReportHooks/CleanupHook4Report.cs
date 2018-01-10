@@ -13,6 +13,11 @@ namespace TestReport.SpecFlow.ReportHooks
     [Binding]
     public sealed class CleanupHook4Report
     {
+        public CleanupHook4Report(IObjectContainer objectContainer)
+        {
+            _objectContainer = objectContainer;
+        }
+
         IObjectContainer _objectContainer;
 
         public IObjectContainer ObjectContainer
