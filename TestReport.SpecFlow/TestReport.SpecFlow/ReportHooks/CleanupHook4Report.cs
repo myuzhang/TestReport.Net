@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BoDi;
+using System;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -12,7 +13,32 @@ namespace TestReport.SpecFlow.ReportHooks
     [Binding]
     public sealed class CleanupHook4Report
     {
-        // For additional details on SpecFlow hooks see http://go.specflow.org/doc-hooks
+        IObjectContainer _objectContainer;
+
+        public IObjectContainer ObjectContainer
+        {
+            get
+            {
+                if (_objectContainer == null)
+                {
+                    throw new InvalidOperationException("Cannot access ObjectContainer until after the constructor has fully executed");
+                }
+                return _objectContainer;
+            }
+            set
+            {
+                _objectContainer = value;
+            }
+        }
+
+        public ScenarioContext ScenarioContext
+        {
+            get
+            {
+                return ObjectContainer.Resolve<ScenarioContext>();
+            }
+        }
+
 
         [AfterTestRun(Order = 500)]
         public static void GenerateTestResultReportInHtml()
@@ -44,10 +70,10 @@ namespace TestReport.SpecFlow.ReportHooks
         [AfterScenario(Order = 1)]
         public void TakeScreenShotIfFailed()
         {
-            if (ScenarioContext.Current.TestError == null) return;
+            if (ScenarioContext.TestError == null) return;
 
             string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
-            string screenShotFileName = $@"{ScenarioContext.Current.ScenarioInfo.Title}_{DateTime.Now.ToString("yyyyMMdd_hhmmss")}.jpg";
+            string screenShotFileName = $@"{ScenarioContext.ScenarioInfo.Title}_{DateTime.Now.ToString("yyyyMMdd_hhmmss")}.jpg";
             string screenShotFile = $@"{testResultFolder}\{screenShotFileName}";
 
             // Please refer to: http://stackoverflow.com/questions/1163761/capture-screenshot-of-active-window
@@ -69,11 +95,11 @@ namespace TestReport.SpecFlow.ReportHooks
         [AfterScenario(Order = 200)]
         public void StoreScenarioInfo()
         {
-            bool testPassResult = ScenarioContext.Current.TestError == null;
+            bool testPassResult = ScenarioContext.TestError == null;
             string errorMessage = null;
             if (!testPassResult)
             {
-                errorMessage = ScenarioContext.Current.TestError.Message;
+                errorMessage = ScenarioContext.TestError.Message;
             }
 
             TestScenarioDetailsManager
