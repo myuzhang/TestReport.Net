@@ -51,7 +51,7 @@ namespace TestReport.SpecFlow.ReportHooks
 
         static CleanupHook4Report()
         {
-            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specflow.Report");
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specFlow.Report");
             _mailSettings = section.MailSettings;
             _reportSettings = section.ReportSettings;
         }

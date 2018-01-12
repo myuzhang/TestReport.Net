@@ -46,7 +46,7 @@ namespace TestReport.SpecFlow.ReportHooks
 
         static StartupHook4Report()
         {
-            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specflow.Report");
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specFlow.Report");
             _reportSettings = section.ReportSettings;
         }
 
