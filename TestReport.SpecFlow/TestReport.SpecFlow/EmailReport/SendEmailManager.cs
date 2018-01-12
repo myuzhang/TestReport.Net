@@ -83,7 +83,7 @@ namespace TestReport.SpecFlow.EmailReport
             // refer to http://stackoverflow.com/questions/15241889/i-didnt-find-zipfile-class-in-the-system-io-compression-namespace
             if (!string.IsNullOrEmpty(attachmentFolder))
             {
-                string testResultFolder = _reportSettings.Path;
+                string testResultFolder = Environment.ExpandEnvironmentVariables(_reportSettings.Path);
                 string zipFile = $@"{testResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}.zip";
                 ZipFile.CreateFromDirectory(attachmentFolder, zipFile, CompressionLevel.Fastest, true);
                 mm.Attachments.Add(new Attachment(zipFile));

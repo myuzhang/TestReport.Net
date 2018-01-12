@@ -53,7 +53,7 @@ namespace TestReport.SpecFlow.ReportHooks
         [BeforeTestRun(Order = 12)]
         public static void CreateTestResultsFolder()
         {
-            string failedTestResultFolder = _reportSettings.Path;
+            string failedTestResultFolder = Environment.ExpandEnvironmentVariables(_reportSettings.Path);
             failedTestResultFolder = $@"{failedTestResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}";
             if (!Directory.Exists(failedTestResultFolder))
             {
