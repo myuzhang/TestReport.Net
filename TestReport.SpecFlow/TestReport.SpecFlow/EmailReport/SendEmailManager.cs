@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO.Compression;
 using System.Net.Mail;
 using System.Text;
+using TestReport.SpecFlow.Configuration;
 using TestReport.SpecFlow.MakeReport;
 
 namespace TestReport.SpecFlow.EmailReport
@@ -12,24 +13,30 @@ namespace TestReport.SpecFlow.EmailReport
     public class SendEmailManager
     {
         private static SendEmailManager _instance;
+        private readonly MailSettingsElement _mailSettings;
+        private readonly ReportSettingsElement _reportSettings;
 
         private SmtpClient _client;
 
         private SendEmailManager()
         {
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specflow.Report");
+            _mailSettings = section.MailSettings;
+            _reportSettings = section.ReportSettings;
+
             _client = new SmtpClient
             {
-                Host = ConfigurationManager.AppSettings["stmpHost"],
-                Port = Int32.Parse(ConfigurationManager.AppSettings["stmpPort"]),
-                EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["stmpSSL"]),
+                Host = _mailSettings.Host,
+                Port = _mailSettings.Port,
+                EnableSsl = _mailSettings.EnableSsl,
                 Timeout = 60000,
                 DeliveryMethod = SmtpDeliveryMethod.Network
             };
             if (_client.EnableSsl)
             {
                 _client.Credentials = new System.Net.NetworkCredential(
-                    ConfigurationManager.AppSettings["stmpUser"],
-                    ConfigurationManager.AppSettings["stmpPass"]);
+                    _mailSettings.Username,
+                    _mailSettings.Password);
             }
         }
 
@@ -52,8 +59,8 @@ namespace TestReport.SpecFlow.EmailReport
                 BodyEncoding = Encoding.UTF8,
                 DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure
             };
-            mm.From = new MailAddress(ConfigurationManager.AppSettings["stmpFrom"]);
-            var sentToString = ConfigurationManager.AppSettings["stmpTo"];
+            mm.From = new MailAddress(_mailSettings.FromAddress);
+            var sentToString = _mailSettings.ToAddresses;
             if (!string.IsNullOrEmpty(sentToString))
             {
                 var sentTos = sentToString.Split(';');
@@ -63,7 +70,7 @@ namespace TestReport.SpecFlow.EmailReport
                 }
             }
             //mm.Subject = "Test Result";
-            mm.Subject = ConfigurationManager.AppSettings["subjectEmail"];
+            mm.Subject = _mailSettings.Subject;
             mm.IsBodyHtml = true;
             TestResultMailBody mailBody = new TestResultMailBody();
             mailBody
@@ -75,8 +82,8 @@ namespace TestReport.SpecFlow.EmailReport
 
             // refer to http://stackoverflow.com/questions/15241889/i-didnt-find-zipfile-class-in-the-system-io-compression-namespace
             if (!string.IsNullOrEmpty(attachmentFolder))
-            {               
-                string testResultFolder = ConfigurationManager.AppSettings["testResultFolder"];
+            {
+                string testResultFolder = _reportSettings.Path;
                 string zipFile = $@"{testResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}.zip";
                 ZipFile.CreateFromDirectory(attachmentFolder, zipFile, CompressionLevel.Fastest, true);
                 mm.Attachments.Add(new Attachment(zipFile));

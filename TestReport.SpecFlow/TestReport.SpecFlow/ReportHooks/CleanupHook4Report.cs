@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using TechTalk.SpecFlow;
+using TestReport.SpecFlow.Configuration;
 using TestReport.SpecFlow.EmailReport;
 using TestReport.SpecFlow.MakeReport;
 
@@ -45,6 +46,16 @@ namespace TestReport.SpecFlow.ReportHooks
         }
 
 
+        private static readonly ReportSettingsElement _reportSettings;
+        private static readonly MailSettingsElement _mailSettings;
+
+        static CleanupHook4Report()
+        {
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specflow.Report");
+            _mailSettings = section.MailSettings;
+            _reportSettings = section.ReportSettings;
+        }
+
         [AfterTestRun(Order = 500)]
         public static void GenerateTestResultReportInHtml()
         {
@@ -60,7 +71,7 @@ namespace TestReport.SpecFlow.ReportHooks
         {
             try
             {
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["sendEmailReport"]))
+                if (_mailSettings != null && _mailSettings.Enabled)
                 {
                     string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
                     SendEmailManager.Instance.SendEmail(testResultFolder);

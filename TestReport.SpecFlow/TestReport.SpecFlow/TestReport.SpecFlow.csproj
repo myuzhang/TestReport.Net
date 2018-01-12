@@ -52,6 +52,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationTemplate.csd.cs">
+      <DependentUpon>ConfigurationTemplate.csd.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\ConfigurationTemplate1.csd.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConfigurationTemplate.csd</DependentUpon>
+    </Compile>
     <Compile Include="EmailReport\SendEmailManager.cs" />
     <Compile Include="EmailReport\TestResultMailBody.cs" />
     <Compile Include="MakeReport\TestResultReportInHtmlManager.cs" />
@@ -65,9 +73,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Configuration\ConfigurationTemplate.csd">
+      <Generator>CsdFileGenerator</Generator>
+      <LastGenOutput>ConfigurationTemplate1.csd.cs</LastGenOutput>
+    </None>
+    <None Include="Configuration\ConfigurationTemplate.csd.config">
+      <DependentUpon>ConfigurationTemplate.csd</DependentUpon>
+    </None>
+    <None Include="Configuration\ConfigurationTemplate.csd.xsd">
+      <DependentUpon>ConfigurationTemplate.csd</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\app.config.transform" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

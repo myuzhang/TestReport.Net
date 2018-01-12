@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.IO;
 using TechTalk.SpecFlow;
+using TestReport.SpecFlow.Configuration;
 using TestReport.SpecFlow.MakeReport;
 
 namespace TestReport.SpecFlow.ReportHooks
@@ -40,11 +41,19 @@ namespace TestReport.SpecFlow.ReportHooks
                 return ObjectContainer.Resolve<ScenarioContext>();
             }
         }
+        // For additional details on SpecFlow hooks see http://go.specflow.org/doc-hooks
+        private static readonly ReportSettingsElement _reportSettings;
+
+        static StartupHook4Report()
+        {
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specflow.Report");
+            _reportSettings = section.ReportSettings;
+        }
 
         [BeforeTestRun(Order = 12)]
         public static void CreateTestResultsFolder()
         {
-            string failedTestResultFolder = ConfigurationManager.AppSettings["testResultFolder"];
+            string failedTestResultFolder = _reportSettings.Path;
             failedTestResultFolder = $@"{failedTestResultFolder}\{DateTime.Now.ToString("yyyy-MM-dd HH_mm")}";
             if (!Directory.Exists(failedTestResultFolder))
             {
