@@ -1,9 +1,11 @@
-﻿using System;
+﻿using BoDi;
+using System;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using TechTalk.SpecFlow;
+using TestReport.SpecFlow.Configuration;
 using TestReport.SpecFlow.EmailReport;
 using TestReport.SpecFlow.MakeReport;
 
@@ -12,7 +14,47 @@ namespace TestReport.SpecFlow.ReportHooks
     [Binding]
     public sealed class CleanupHook4Report
     {
-        // For additional details on SpecFlow hooks see http://go.specflow.org/doc-hooks
+        public CleanupHook4Report(IObjectContainer objectContainer)
+        {
+            _objectContainer = objectContainer;
+        }
+
+        IObjectContainer _objectContainer;
+
+        public IObjectContainer ObjectContainer
+        {
+            get
+            {
+                if (_objectContainer == null)
+                {
+                    throw new InvalidOperationException("Cannot access ObjectContainer until after the constructor has fully executed");
+                }
+                return _objectContainer;
+            }
+            set
+            {
+                _objectContainer = value;
+            }
+        }
+
+        public ScenarioContext ScenarioContext
+        {
+            get
+            {
+                return ObjectContainer.Resolve<ScenarioContext>();
+            }
+        }
+
+
+        private static readonly ReportSettingsElement _reportSettings;
+        private static readonly MailSettingsElement _mailSettings;
+
+        static CleanupHook4Report()
+        {
+            var section = (SpecFlowReportSection)ConfigurationManager.GetSection("specFlow.Report");
+            _mailSettings = section.MailSettings;
+            _reportSettings = section.ReportSettings;
+        }
 
         [AfterTestRun(Order = 500)]
         public static void GenerateTestResultReportInHtml()
@@ -29,7 +71,7 @@ namespace TestReport.SpecFlow.ReportHooks
         {
             try
             {
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["sendEmailReport"]))
+                if (_mailSettings != null && _mailSettings.Enabled)
                 {
                     string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
                     SendEmailManager.Instance.SendEmail(testResultFolder);
@@ -44,10 +86,10 @@ namespace TestReport.SpecFlow.ReportHooks
         [AfterScenario(Order = 1)]
         public void TakeScreenShotIfFailed()
         {
-            if (ScenarioContext.Current.TestError == null) return;
+            if (ScenarioContext.TestError == null) return;
 
             string testResultFolder = TestRunContext.GetValue<string>("TestResultFolder");
-            string screenShotFileName = $@"{ScenarioContext.Current.ScenarioInfo.Title}_{DateTime.Now.ToString("yyyyMMdd_hhmmss")}.jpg";
+            string screenShotFileName = $@"{ScenarioContext.ScenarioInfo.Title}_{DateTime.Now.ToString("yyyyMMdd_hhmmss")}.jpg";
             string screenShotFile = $@"{testResultFolder}\{screenShotFileName}";
 
             // Please refer to: http://stackoverflow.com/questions/1163761/capture-screenshot-of-active-window
@@ -69,11 +111,11 @@ namespace TestReport.SpecFlow.ReportHooks
         [AfterScenario(Order = 200)]
         public void StoreScenarioInfo()
         {
-            bool testPassResult = ScenarioContext.Current.TestError == null;
+            bool testPassResult = ScenarioContext.TestError == null;
             string errorMessage = null;
             if (!testPassResult)
             {
-                errorMessage = ScenarioContext.Current.TestError.Message;
+                errorMessage = ScenarioContext.TestError.Message;
             }
 
             TestScenarioDetailsManager

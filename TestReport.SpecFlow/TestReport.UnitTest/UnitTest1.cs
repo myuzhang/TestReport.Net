@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace TestReport.UnitTest
 {
